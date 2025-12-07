@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>driver.taxi — Premium Domain For Sale</title>
+  <meta name="description" content="driver.taxi — premium domain ideal for driver-facing apps, dispatch platforms, ride-hailing marketplaces, fleet tools and driver services. Submit an offer to purchase." />
+  <meta property="og:title" content="driver.taxi — Premium Domain For Sale" />
+  <meta property="og:description" content="driver.taxi — premium domain for driver apps, dispatch & routing, fleet management, onboarding and driver services. Contact domain@driver.taxi" />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#0b3a3a" />
+  <link rel="icon" href="/favicon.ico" />
+
+  <style>
+    :root{
+      --max-width:1120px;
+      --panel:#ffffff;
+      --muted:#6b8084;
+      --accent-drive:#00c089; /* green for go */
+      --accent-route:#ffd166; /* warm highlight */
+      --ink:#05282a;
+      --bg-dark-1:#081214;
+      --bg-dark-2:#073137;
+      --radius:14px;
+      --shadow: 0 28px 90px rgba(3,10,12,0.6);
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      color-scheme: dark;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      min-height:100vh;
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+      padding:36px 20px;
+      background:
+        radial-gradient(900px 320px at 12% 14%, rgba(0,192,137,0.03), transparent 12%),
+        linear-gradient(180deg,var(--bg-dark-1) 0%, var(--bg-dark-2) 100%);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.45;
+      overflow-x:hidden;
+      overflow-y:auto;
+      color:var(--panel);
+    }
+
+    /* Assistant-chosen look: "Driver hub / urban dispatch"
+       - muted night map + route lines
+       - steering wheel + cab silhouette watermark
+       - floating icons for earnings, routes and support
+       - pointer-events:none on decorative layers so they don't block interaction
+    */
+    .bg { position:fixed; inset:0; z-index:0; pointer-events:none; overflow:visible; }
+
+    .map-grid{
+      position:fixed;
+      inset:0;
+      z-index:0;
+      pointer-events:none;
+      background-image:
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(255,255,255,0.01) 1px, transparent 1px);
+      background-size: 48px 48px, 48px 48px;
+      mix-blend-mode: overlay;
+      opacity:0.04;
+    }
+
+    .route-diagram {
+      position:fixed;
+      right:6%;
+      top:8%;
+      width:460px;
+      height:320px;
+      z-index:0;
+      pointer-events:none;
+      opacity:0.08;
+      background-image:
+        url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 460 320'><g fill='none' stroke='%23ffffff' stroke-opacity='0.06' stroke-width='2'><path d='M10 260 C60 200 120 220 180 160 C240 100 300 140 360 92 C420 44 450 20 450 20' stroke-linecap='round' stroke-linejoin='round'/></g><g fill='%23ffffff' fill-opacity='0.04'><circle cx='18' cy='262' r='6'/><circle cx='182' cy='162' r='6'/><circle cx='362' cy='92' r='6'/></g></svg>");
+      background-repeat:no-repeat;
+      background-size:contain;
+      mix-blend-mode:screen;
+    }
+
+    .watermark {
+      position:fixed;
+      left:6%;
+      top:8%;
+      width:300px;
+      height:300px;
+      z-index:0;
+      pointer-events:none;
+      opacity:0.06;
+      background-image:
+        url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'><g fill='%23ffffff' fill-opacity='0.06'><path d='M150 30c28 0 72 18 88 40 8 12 12 26 10 38-2 12-12 20-20 28-16 16-36 18-52 36-12 14-18 34-36 42-18-8-26-28-36-42-16-20-36-22-52-38-8-8-18-16-20-28-2-12 2-26 10-38C78 48 122 30 150 30z'/></g></svg>");
+      background-repeat:no-repeat;
+      background-size:contain;
+      mix-blend-mode:multiply;
+    }
+
+    .floaters {
+      position:fixed;
+      inset:0;
+      z-index:0;
+      pointer-events:none;
+      overflow:visible;
+    }
+
+    .float-icon {
+      position:absolute;
+      width:56px;
+      height:56px;
+      background-size:contain;
+      background-repeat:no-repeat;
+      opacity:0.12;
+      will-change: transform, opacity;
+      filter: drop-shadow(0 12px 24px rgba(0,0,0,0.6));
+    }
+
+    @keyframes floaty {
+      0% { transform: translateY(0) rotate(-4deg); }
+      50% { transform: translateY(-18px) rotate(6deg); }
+      100% { transform: translateY(0) rotate(-4deg); }
+    }
+
+    .container{
+      width:100%;
+      max-width:var(--max-width);
+      padding:36px;
+      border-radius:18px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      backdrop-filter: blur(6px) saturate(1.02);
+      border: 1px solid rgba(255,255,255,0.03);
+      box-shadow: var(--shadow);
+      position:relative;
+      z-index:2;
+    }
+
+    header{
+      display:flex;
+      gap:18px;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:18px;
+    }
+
+    .brand{ display:flex; gap:14px; align-items:center; }
+    .logo{
+      width:86px;
+      height:86px;
+      border-radius:14px;
+      background: linear-gradient(135deg,var(--accent-drive), var(--accent-route));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:#062622;
+      font-weight:900;
+      font-size:20px;
+      box-shadow: 0 12px 36px rgba(0,0,0,0.5);
+      flex-shrink:0;
+      border:1px solid rgba(255,255,255,0.04);
+    }
+
+    h1{ margin:0; font-size:28px; color:var(--panel); }
+    p.lead{ margin:6px 0 0; color:var(--muted); font-size:14px; max-width:760px; }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 360px;
+      gap:26px;
+      align-items:start;
+      margin-top:8px;
+    }
+
+    .hero {
+      background: linear-gradient(90deg, rgba(0,192,137,0.02), rgba(255,209,102,0.01));
+      padding:16px 18px;
+      border-radius:12px;
+      color:var(--panel);
+      margin-bottom:16px;
+      border:1px solid rgba(255,255,255,0.02);
+    }
+    .hero p{ margin:0; font-size:15px; color:var(--panel); }
+
+    .panel {
+      background: var(--panel);
+      color:var(--ink);
+      padding:22px;
+      border-radius:14px;
+      box-shadow: 0 10px 34px rgba(0,0,0,0.12);
+      border: 1px solid rgba(0,0,0,0.04);
+      max-width:820px;
+    }
+
+    h2{ margin-top:0; font-size:20px; color:var(--ink); }
+    .features ul{ margin:0; padding-left:18px; color:#556b6e; }
+    .features li{ margin-bottom:10px; }
+
+    .mini {
+      display:flex;
+      gap:12px;
+      margin-top:12px;
+      align-items:center;
+    }
+    .badge {
+      padding:10px 12px;
+      border-radius:10px;
+      background: linear-gradient(180deg,#fff,#f6f7f7);
+      color:#556b6e;
+      font-weight:700;
+      border:1px solid rgba(0,0,0,0.04);
+    }
+
+    .cta-row{ display:flex; gap:12px; margin-top:16px; flex-wrap:wrap; align-items:center; }
+    .btn{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      padding:10px 16px;
+      border-radius:999px;
+      font-weight:700;
+      cursor:pointer;
+      text-decoration:none;
+      border:0;
+    }
+    .btn-primary{
+      background: linear-gradient(90deg,var(--accent-drive), var(--accent-route));
+      color:#052827;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+    }
+    .btn-ghost{
+      background:transparent;
+      border:1px solid rgba(255,255,255,0.06);
+      color:var(--muted);
+    }
+
+    .price { margin-top:12px; font-weight:800; color:var(--ink); font-size:16px; }
+    .muted-small { color:var(--muted); font-size:13px; margin-top:6px; }
+
+    .contact-card{
+      position:sticky;
+      top:32px;
+      align-self:start;
+      background: linear-gradient(180deg, rgba(255,255,255,0.995), rgba(255,255,255,0.98));
+      padding:18px;
+      border-radius:12px;
+      border:1px solid rgba(0,0,0,0.04);
+      box-shadow: 0 8px 26px rgba(0,0,0,0.12);
+      max-width:360px;
+      color:var(--ink);
+    }
+
+    .contact-card h3{ margin:0 0 8px 0; font-size:16px; color:var(--ink); }
+    .contact-email, .contact-email a{
+      white-space:nowrap;
+      display:inline-block;
+      font-weight:700;
+      color:var(--accent-drive);
+      word-break: normal;
+      font-size:0.98rem;
+      text-decoration:none;
+    }
+
+    form label{ display:block; font-size:13px; color:#6b8084; margin-bottom:6px; }
+    form input, form textarea {
+      width:100%;
+      padding:10px 12px;
+      border-radius:10px;
+      border:1px solid rgba(0,0,0,0.08);
+      background:#fff;
+      color:var(--ink);
+      font-size:14px;
+      margin-bottom:12px;
+    }
+    form textarea{ min-height:110px; resize:vertical; }
+
+    footer{ margin-top:18px; color:var(--muted); font-size:13px; text-align:center; }
+
+    @media (max-width:980px){
+      .grid{ grid-template-columns: 1fr; gap:18px; }
+      .contact-card{ position:relative; top:auto; width:100%; max-width:none; }
+      .container{ padding:22px; }
+      .logo{ width:72px; height:72px; border-radius:12px; }
+      h1{ font-size:22px; }
+      .route-diagram, .watermark, .floaters, .map-grid { display:none; }
+    }
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@graph":[
+      {
+        "@type":"WebSite",
+        "url":"https://driver.taxi",
+        "name":"driver.taxi",
+        "description":"driver.taxi — premium domain for driver apps, dispatch platforms, fleet tools and driver services."
+      },
+      {
+        "@type":"ContactPoint",
+        "contactType":"sales",
+        "email":"domain@driver.taxi"
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <div class="bg" aria-hidden="true">
+    <div class="map-grid" aria-hidden="true"></div>
+    <div class="route-diagram" aria-hidden="true"></div>
+    <div class="watermark" aria-hidden="true"></div>
+    <div class="floaters" id="floaters" aria-hidden="true"></div>
+  </div>
+
+  <main class="container" role="main" aria-labelledby="main-heading">
+    <header>
+      <div class="brand">
+        <div class="logo" aria-hidden="true">DT</div>
+        <div>
+          <h1 id="main-heading">driver.taxi</h1>
+          <p class="lead">Premium domain for driver apps, dispatch platforms, fleet tools, onboarding and driver services.</p>
+        </div>
+      </div>
+
+      <div style="text-align:right">
+        <div style="color:var(--muted);font-size:13px">For inquiries</div>
+        <div class="contact-email"><a href="mailto:domain@driver.taxi">domain@driver.taxi</a></div>
+      </div>
+    </header>
+
+    <div class="hero" role="note" aria-live="polite">
+      <p>Driver.Taxi pairs a concise, driver-focused namespace with strong brand potential — ideal for apps and platforms that serve drivers: routing, earnings, onboarding, safety and fleet management.</p>
+    </div>
+
+    <section class="grid" aria-label="Main content">
+      <div>
+        <article class="panel" aria-labelledby="why-title">
+          <h2 id="why-title">Why driver.taxi?</h2>
+          <p class="lead">A short, category-explicit .taxi domain that signals usefulness to drivers and platforms supporting them. Great for driver portals, dispatch & routing, driver marketplaces, and earnings tools.</p>
+
+          <div class="features" style="margin-top:12px">
+            <ul>
+              <li>Immediate category signal — drivers and partners understand the product focus fast</li>
+              <li>Fits driver apps, onboarding tools, payout & earnings dashboards, dispatch and fleet platforms</li>
+              <li>Brandable across mobile apps, partner integrations, marketing and driver communications</li>
+            </ul>
+          </div>
+
+          <div class="mini" aria-hidden="false">
+            <div class="badge">Driver App</div>
+            <div class="badge">Dispatch</div>
+            <div class="badge">Fleet Tools</div>
+          </div>
+
+          <div class="cta-row" role="group" aria-label="Actions">
+            <a class="btn btn-primary" href="#" id="inquireBtn">Make an Offer</a>
+            <a class="btn btn-ghost" href="mailto:domain@driver.taxi?subject=Domain%20Offer%20-%20driver.taxi">Email Now</a>
+          </div>
+
+          <div class="price">Domain: driver.taxi</div>
+          <div class="muted-small">Serious offers only. Transfer via escrow recommended for secure and trusted transactions.</div>
+        </article>
+
+        <article class="panel" style="margin-top:18px" aria-labelledby="about-title">
+          <h3 id="about-title" style="margin-top:0">About this domain</h3>
+          <p class="lead">Driver.Taxi is optimized for products aimed at drivers and mobility operators: from routing and dispatch to earnings tooling, onboarding flows and fleet operations.</p>
+
+          <ul style="color:var(--muted);margin-top:12px">
+            <li>Great for driver-facing apps, dispatch systems, fleet management and driver marketplaces</li>
+            <li>Useful for safety tooling, onboarding, payouts and driver support platforms</li>
+            <li>Transfer-ready — escrow recommended to ensure a secure and verifiable transaction</li>
+          </ul>
+        </article>
+      </div>
+
+      <aside class="contact-card" aria-label="Contact & offer">
+        <div>
+          <h3 style="margin-top:0">Contact & Offer</h3>
+          <p style="margin-top:6px;color:var(--muted)">Submit an offer — this form opens your email client with the details prefilled. Or email <a href="mailto:domain@driver.taxi" class="contact-email">domain@driver.taxi</a>.</p>
+
+          <form id="inquiryForm" onsubmit="handleSubmit(event)" aria-label="Domain offer form">
+            <label for="name">Your name</label>
+            <input id="name" name="name" type="text" placeholder="Jane Doe" required />
+
+            <label for="email">Your email</label>
+            <input id="email" name="email" type="email" placeholder="you@example.com" required />
+
+            <label for="offer">Your offer (USD)</label>
+            <input id="offer" name="offer" type="text" placeholder="Enter your offer (USD)" required />
+
+            <label for="company">Company (optional)</label>
+            <input id="company" name="company" type="text" placeholder="Your company or organization" />
+
+            <label for="country">Country</label>
+            <input id="country" name="country" type="text" placeholder="Your country" required />
+
+            <label for="phone">Phone number (optional)</label>
+            <input id="phone" name="phone" type="tel" />
+
+            <label for="message">Message (questions, timeline, escrow preference)</label>
+            <textarea id="message" name="message" placeholder="Hi — I'm submitting an offer for driver.taxi. Please share transfer instructions and next steps."></textarea>
+
+            <button class="btn btn-primary" type="submit" style="width:100%; margin-top:6px">Send Offer</button>
+          </form>
+
+          <footer style="margin-top:10px; text-align:left; color:var(--muted); font-size:13px">
+            Prefer a direct email? <a href="mailto:domain@driver.taxi" style="color:var(--accent-drive)" class="contact-email">domain@driver.taxi</a>
+          </footer>
+        </div>
+      </aside>
+    </section>
+
+    <footer>
+      &copy; 2025 driver.taxi. All rights reserved.
+    </footer>
+  </main>
+
+  <script>
+    // floating route/earnings/support icons to add subtle motion
+    (function placeFloaters(){
+      const layer = document.getElementById('floaters');
+      if(!layer) return;
+
+      const icons = {
+        earnings: encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><circle cx='32' cy='32' r='26' fill='%23FFD166'/><text x='32' y='38' font-size='18' font-family='Arial' text-anchor='middle' fill='%23052323'>$</text></svg>`),
+        steering: encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><circle cx='32' cy='32' r='26' fill='%2300C089'/><circle cx='32' cy='32' r='6' fill='%23ffffff'/></svg>`),
+        badge: encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='10' y='6' width='44' height='36' rx='6' fill='%23ffffff' opacity='0.06'/><path d='M32 46 L24 60 L40 60 Z' fill='%23ffffff' opacity='0.06'/></svg>`)
+      };
+
+      const items = [
+        {svg:icons.steering, left:'14%', top:'20%', size:68, dur:9000},
+        {svg:icons.earnings, left:'72%', top:'24%', size:56, dur:11000},
+        {svg:icons.badge, left:'48%', top:'68%', size:64, dur:10000},
+        {svg:icons.steering, left:'84%', top:'52%', size:44, dur:13000}
+      ];
+
+      items.forEach(it => {
+        const el = document.createElement('div');
+        el.className = 'float-icon';
+        el.style.left = it.left;
+        el.style.top = it.top;
+        el.style.width = it.size + 'px';
+        el.style.height = it.size + 'px';
+        el.style.backgroundImage = `url("data:image/svg+xml;utf8,${it.svg}")`;
+        el.style.animation = `floaty ${it.dur}ms ease-in-out ${Math.random()*1200}ms infinite`;
+        el.style.opacity = 0.06 + Math.random()*0.12;
+        layer.appendChild(el);
+      });
+    })();
+
+    function handleSubmit(e){
+      e.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const offer = document.getElementById('offer').value.trim();
+      const company = document.getElementById('company').value.trim();
+      const country = document.getElementById('country').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const message = document.getElementById('message').value.trim();
+
+      const subject = encodeURIComponent('Domain Offer - driver.taxi');
+      const bodyText =
+        `Name: ${name}\n` +
+        `Email: ${email}\n` +
+        `Company: ${company || '(not provided)'}\n` +
+        `Offer (USD): ${offer}\n` +
+        `Country: ${country}\n` +
+        `Phone: ${phone || '(not provided)'}\n\n` +
+        `Message:\n${message}\n\n---\nSent from driver.taxi offer form`;
+
+      const body = encodeURIComponent(bodyText);
+      window.location.href = `mailto:domain@driver.taxi?subject=${subject}&body=${body}`;
+    }
+
+    document.getElementById('inquireBtn').addEventListener('click', function(e){
+      e.preventDefault();
+      const form = document.getElementById('inquiryForm');
+      if(window.innerWidth < 900){
+        form.scrollIntoView({behavior:'smooth', block:'center'});
+        form.querySelector('input')?.focus();
+      } else {
+        const subject = encodeURIComponent('Domain Offer - driver.taxi');
+        const body = encodeURIComponent('Hi — I would like to make an offer for driver.taxi. Please reply with transfer instructions and next steps.');
+        window.location.href = `mailto:domain@driver.taxi?subject=${subject}&body=${body}`;
+      }
+    });
+  </script>
+</body>
+</html>
